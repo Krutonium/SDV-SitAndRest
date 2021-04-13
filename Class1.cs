@@ -14,12 +14,20 @@ namespace SitAndRest
             helper.Events.GameLoop.UpdateTicked += GameLoopOnUpdateTicked;
             this.Config = this.Helper.ReadConfig<ModConfig>();
         }
+        
         private void GameLoopOnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (Context.IsWorldReady)
             {
                 if (Game1.player.isSitting)
                 {
+                    if (Game1.player.hasMenuOpen)
+                    {
+                        if (Config.ShouldHealWhenPaused == false)
+                        {
+                            return;
+                        }
+                    }
                     if (e.IsOneSecond)
                     {
                         if (Game1.player.health < Game1.player.maxHealth)
@@ -56,6 +64,7 @@ namespace SitAndRest
         {
             public int HealthPerSecond = 1;
             public int EnergyPerSecond = 1;
+            public bool ShouldHealWhenPaused = false;
         }
     }
 }
